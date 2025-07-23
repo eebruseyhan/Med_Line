@@ -1,19 +1,35 @@
-import React from "react";
-import { Camera } from "lucide-react";
-import { Theme } from "@radix-ui/themes";
-import { BaseButton } from "./components/ui/button";
+import React, { useState } from "react";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { Sidebar } from "./components/Sidebar";
+import { Dashboard } from "./components/Dashboard";
+import { AIDiagnosis } from "./components/AIDiagnosis";
 
 function App(): React.ReactElement {
+  const [activeSection, setActiveSection] = useState<string>("dashboard");
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case "dashboard":
+        return <Dashboard />;
+      case "ai-diagnosis":
+        return <AIDiagnosis />;
+    }
+  };
+
   return (
-    <Theme>
-      <div className="App">
-        <h1>Hello World</h1>
-        <Camera color="#000" size={48} />
+    <ThemeProvider defaultTheme="system" storageKey="medicare-ui-theme">
+      <div className="flex h-screen bg-background transition-colors duration-300">
+        <Sidebar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
 
-        <BaseButton>Let's go</BaseButton>
-
+        <main className="flex-1 overflow-auto">{renderContent()}</main>
       </div>
-    </Theme>
+    </ThemeProvider>
   );
 }
 
