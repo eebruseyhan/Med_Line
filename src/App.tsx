@@ -3,6 +3,14 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { Sidebar } from "./components/Sidebar";
 import { Dashboard } from "./components/Dashboard";
 import { AIDiagnosis } from "./components/AIDiagnosis";
+import { DoctorSearch } from "./components/DoctorSearch";
+import { Appointments } from "./components/Appointments";
+import { Profile } from "./components/Profile";
+import { MedicalRecords } from "./components/MedicalRecords";
+import { Prescriptions } from "./components/prescriptions";
+import { Pharmacy } from "./components/pharmacy";
+import { Notifications } from "./components/notifications";
+import { Feedback } from "./components/feedback";
 
 function App(): React.ReactElement {
   const [activeSection, setActiveSection] = useState<string>("dashboard");
@@ -12,8 +20,25 @@ function App(): React.ReactElement {
     switch (activeSection) {
       case "dashboard":
         return <Dashboard />;
+      case "profile":
+        return <Profile />; 
       case "ai-diagnosis":
         return <AIDiagnosis />;
+      case "doctor-search":
+        return <DoctorSearch />;
+      case "appointments":
+        return <Appointments />;
+      case "medical-records":
+        return <MedicalRecords />;
+      case "prescriptions":
+        return <Prescriptions />;
+      case "pharmacy":
+        return <Pharmacy />;
+      case "notifications":
+        return <Notifications />;
+      case "feedback":
+        return <Feedback />;
+ 
     }
   };
 

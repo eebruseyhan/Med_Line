@@ -39,9 +39,9 @@ export function Sidebar({ activeSection, setActiveSection, isCollapsed, setIsCol
     { id: 'dashboard', label: 'Ana Sayfa', icon: Heart },
     { id: 'profile', label: 'Profil', icon: User },
     { id: 'ai-diagnosis', label: 'AI Ön Tanı', icon: Stethoscope },
-    { id: 'doctors', label: 'Doktor Ara', icon: User },
+    { id: 'doctor-search', label: 'Doktor Ara', icon: User },
     { id: 'appointments', label: 'Randevular', icon: Calendar },
-    { id: 'records', label: 'Tıbbi Kayıtlar', icon: FileText },
+    { id: 'medical-records', label: 'Tıbbi Kayıtlar', icon: FileText },
     { id: 'prescriptions', label: 'Reçeteler', icon: Pill },
     { id: 'pharmacy', label: 'Eczane', icon: Package },
     { id: 'notifications', label: 'Bildirimler', icon: Bell },
@@ -90,7 +90,7 @@ export function Sidebar({ activeSection, setActiveSection, isCollapsed, setIsCol
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Heart className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-semibold">MediCare</span>
+              <span className="font-semibold">MedLine</span>
             </div>
           )}
           <Button
