@@ -1,59 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
-import { Sidebar } from "./components/Sidebar";
+import LandingPage from "./components/LandingPage";
+import { HealthAuthForm } from "./components/HealthAuthForm";
 import { Dashboard } from "./components/Dashboard";
-import { AIDiagnosis } from "./components/AIDiagnosis";
-import { DoctorSearch } from "./components/DoctorSearch";
-import { Appointments } from "./components/Appointments";
-import { Profile } from "./components/Profile";
-import { MedicalRecords } from "./components/MedicalRecords";
-import { Prescriptions } from "./components/prescriptions";
-import { Pharmacy } from "./components/pharmacy";
-import { Notifications } from "./components/notifications";
-import { Feedback } from "./components/feedback";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App(): React.ReactElement {
-  const [activeSection, setActiveSection] = useState<string>("dashboard");
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-
-  const renderContent = () => {
-    switch (activeSection) {
-      case "dashboard":
-        return <Dashboard />;
-      case "profile":
-        return <Profile />; 
-      case "ai-diagnosis":
-        return <AIDiagnosis />;
-      case "doctor-search":
-        return <DoctorSearch />;
-      case "appointments":
-        return <Appointments />;
-      case "medical-records":
-        return <MedicalRecords />;
-      case "prescriptions":
-        return <Prescriptions />;
-      case "pharmacy":
-        return <Pharmacy />;
-      case "notifications":
-        return <Notifications />;
-      case "feedback":
-        return <Feedback />;
- 
-    }
-  };
-
   return (
     <ThemeProvider defaultTheme="system" storageKey="medicare-ui-theme">
-      <div className="flex h-screen bg-background transition-colors duration-300">
-        <Sidebar
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-          isCollapsed={isCollapsed}
-          setIsCollapsed={setIsCollapsed}
-        />
+      <Router>
+        <Routes>
+            <Route path="/" element={<LandingPage />} />    
+            <Route path="/login" element={<HealthAuthForm />} />    
+            <Route path="/register" element={<HealthAuthForm />} /> 
+            <Route path="/forgot-password" element={<HealthAuthForm />} />
+            <Route path="/reset-password" element={<HealthAuthForm />} />
+            <Route path="/reset-success" element={<HealthAuthForm />} />
 
-        <main className="flex-1 overflow-auto">{renderContent()}</main>
-      </div>
+          {/* Korumalı kullanıcı sayfası */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Sadece admin'e özel sayfa */}
+          {/* 
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminPanel />
+              </AdminRoute>
+            }
+          />
+          */}
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

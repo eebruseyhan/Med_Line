@@ -24,6 +24,7 @@ export interface SidebarProps {
   setActiveSection: (section: string) => void;
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
+  onLogout?: () => void;
 }
 
 interface MenuItem {
@@ -32,7 +33,7 @@ interface MenuItem {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-export function Sidebar({ activeSection, setActiveSection, isCollapsed, setIsCollapsed }: SidebarProps) {
+export function Sidebar({ activeSection, setActiveSection, isCollapsed, setIsCollapsed, onLogout }: SidebarProps) {
   const { theme, setTheme } = useTheme();
 
   const menuItems: MenuItem[] = [
@@ -148,6 +149,7 @@ export function Sidebar({ activeSection, setActiveSection, isCollapsed, setIsCol
         <Button
           variant="ghost"
           className={`w-full justify-start gap-3 text-destructive hover:text-destructive hover:bg-destructive/10 ${isCollapsed ? 'px-2' : 'px-3'}`}
+          onClick={onLogout}
         >
           <LogOut className="w-4 h-4 flex-shrink-0" />
           {!isCollapsed && <span>Çıkış Yap</span>}
@@ -156,3 +158,5 @@ export function Sidebar({ activeSection, setActiveSection, isCollapsed, setIsCol
     </div>
   );
 }
+
+export default Sidebar;

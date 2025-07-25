@@ -1,7 +1,10 @@
+import React, { useState } from "react";
+import { Sidebar } from "./Sidebar";
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useTheme } from './ThemeProvider';
+import { useNavigate } from 'react-router-dom';
 import { 
   Calendar, 
   Clock, 
@@ -12,8 +15,17 @@ import {
   Heart,
   Thermometer,
   Sun,
-  Moon
+  Moon,
 } from 'lucide-react';
+import { Profile } from "./Profile";
+import { AIDiagnosis } from "./AIDiagnosis";
+import { DoctorSearch } from "./DoctorSearch";
+import { Appointments } from "./Appointments";
+import { MedicalRecords } from "./MedicalRecords";
+import { Prescriptions } from "./prescriptions";
+import { Pharmacy } from "./pharmacy";
+import { Notifications } from "./notifications";
+import { Feedback } from "./feedback";
 
 interface Appointment {
   id: number;
@@ -32,7 +44,18 @@ interface HealthMetric {
 }
 
 export function Dashboard() {
+  const [activeSection, setActiveSection] = useState("dashboard");
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const { theme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // LocalStorage'dan token ve user bilgilerini temizle
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Ana sayfaya yönlendir
+    navigate('/');
+  };
 
   const upcomingAppointments: Appointment[] = [
     {
@@ -67,6 +90,39 @@ export function Dashboard() {
   };
 
   return (
+    <div className="flex h-screen">
+      <Sidebar
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+        onLogout={handleLogout}
+      />
+      <main className="flex-1 overflow-auto">
+        {activeSection === "dashboard" && (
+          <DashboardHome
+            theme={theme}
+            upcomingAppointments={upcomingAppointments}
+            healthMetrics={healthMetrics}
+            getGreetingTime={getGreetingTime}
+          />
+        )}
+        {activeSection === "profile" && <Profile />}
+        {activeSection === "ai-diagnosis" && <AIDiagnosis />}
+        {activeSection === "doctor-search" && <DoctorSearch />}
+        {activeSection === "appointments" && <Appointments />}
+        {activeSection === "medical-records" && <MedicalRecords />}
+        {activeSection === "prescriptions" && <Prescriptions />}
+        {activeSection === "pharmacy" && <Pharmacy />}
+        {activeSection === "notifications" && <Notifications />}
+        {activeSection === "feedback" && <Feedback />}
+      </main>
+    </div>
+  );
+}
+
+function DashboardHome({ theme, upcomingAppointments, healthMetrics, getGreetingTime }: any) {
+  return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
       {/* Welcome Section */}
       <div className="mb-8">
@@ -77,7 +133,6 @@ export function Dashboard() {
         </div>
         <p className="text-muted-foreground">Sağlığınızı takip edin ve doktorlarınızla iletişim kurun.</p>
       </div>
-
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="p-6 transition-colors duration-200">
@@ -91,7 +146,6 @@ export function Dashboard() {
             </div>
           </div>
         </Card>
-        
         <Card className="p-6 transition-colors duration-200">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg transition-colors duration-200">
@@ -103,7 +157,6 @@ export function Dashboard() {
             </div>
           </div>
         </Card>
-        
         <Card className="p-6 transition-colors duration-200">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg transition-colors duration-200">
@@ -115,7 +168,6 @@ export function Dashboard() {
             </div>
           </div>
         </Card>
-        
         <Card className="p-6 transition-colors duration-200">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-lg transition-colors duration-200">
@@ -128,7 +180,6 @@ export function Dashboard() {
           </div>
         </Card>
       </div>
-
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Upcoming Appointments */}
@@ -140,7 +191,7 @@ export function Dashboard() {
             </Button>
           </div>
           <div className="space-y-4">
-            {upcomingAppointments.map((appointment) => (
+            {upcomingAppointments.map((appointment: any) => (
               <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg transition-colors duration-200">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -165,12 +216,11 @@ export function Dashboard() {
             ))}
           </div>
         </Card>
-
         {/* Health Metrics */}
         <Card className="p-6 transition-colors duration-200">
           <h2 className="text-xl font-semibold mb-4">Sağlık Ölçümleri</h2>
           <div className="space-y-4">
-            {healthMetrics.map((metric, index) => {
+            {healthMetrics.map((metric: any, index: number) => {
               const Icon = metric.icon;
               return (
                 <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg transition-colors duration-200">
@@ -191,7 +241,6 @@ export function Dashboard() {
           </Button>
         </Card>
       </div>
-
       {/* Recent Activity */}
       <Card className="p-6 transition-colors duration-200">
         <h2 className="text-xl font-semibold mb-4">Son Aktiviteler</h2>
@@ -222,3 +271,5 @@ export function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;
